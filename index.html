@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Alvin Dai | Chinese-to-English Translator for ESG and Financial Reports</title>
+<meta name="description" content="Chinese-to-English translation of sustainability reports, annual reports and corporate governance documents for listed companies in Taiwan. Remote, confidential, Trados-based.">
+<meta property="og:title" content="Alvin Dai | Chinese-to-English Translator">
+<meta property="og:description" content="ESG reports, annual reports and corporate disclosure in publication-ready English.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;1,400&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif+TC:wght@500&display=swap">
+<style>
+/* Layout: a single reading column with a left margin rail for section labels, like the notes column of an annual report. */
+:root{
+  --bg:#F6F8F7; --surface:#FFFFFF; --ink:#15211D; --muted:#56655F; --line:#D5DDD9; --accent:#1D5B4F; --accent-soft:#E3EEEA;
+  --f-display:"Spectral",Georgia,"Times New Roman",serif;
+  --f-body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --f-zh:"Noto Serif TC","PMingLiU","Songti TC",serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1513; --surface:#141D1A; --ink:#E4EBE8; --muted:#9AABA4; --line:#2A3833; --accent:#7EC4B2; --accent-soft:#1B2D28; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1513; --surface:#141D1A; --ink:#E4EBE8; --muted:#9AABA4; --line:#2A3833; --accent:#7EC4B2; --accent-soft:#1B2D28; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.65 var(--f-body);-webkit-font-smoothing:antialiased}
+.wrap{max-width:68rem;margin:0 auto;padding-inline:clamp(16px,5vw,48px)}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+h1,h2,h3{font-family:var(--f-display);font-weight:600;text-wrap:balance;margin:0}
+p{margin:0}
+
+/* header */
+.top{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding-block:1.25rem;border-bottom:1px solid var(--line)}
+.mark{font-family:var(--f-display);font-size:1.15rem;font-weight:600;color:var(--ink);text-decoration:none}
+.nav{display:flex;flex-wrap:wrap;gap:.25rem 1.25rem;font-size:.875rem}
+.nav a{color:var(--muted);text-decoration:none}
+.nav a:hover{color:var(--accent)}
+
+/* hero */
+.hero{padding-block:clamp(3rem,8vw,6rem) clamp(2rem,5vw,3.5rem)}
+.eyebrow{font:500 .75rem/1.4 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.hero h1{font-size:clamp(2.25rem,6vw,4rem);line-height:1.08;margin-top:1rem;max-width:18ch;letter-spacing:-.01em}
+.hero h1 em{font-style:italic;font-weight:400;color:var(--accent)}
+.lede{font-size:clamp(1.05rem,1.6vw,1.2rem);color:var(--muted);max-width:58ch;margin-top:1.5rem}
+.cta{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:2rem}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.15rem;border-radius:3px;font:500 .9375rem var(--f-body);text-decoration:none;border:1px solid var(--accent);cursor:pointer}
+.btn.primary{background:var(--accent);color:var(--bg)}
+.btn.ghost{background:transparent;color:var(--accent)}
+
+/* glossary strip: the subject's own artefact */
+.gloss{border-block:1px solid var(--line);background:var(--surface);overflow-x:auto}
+.gloss table{border-collapse:collapse;width:100%;min-width:40rem}
+.gloss caption{text-align:left;padding:.9rem 0 .2rem;font:500 .72rem var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.gloss td{padding:.55rem 1.25rem .55rem 0;border-top:1px solid var(--line);vertical-align:baseline}
+.gloss tr:first-child td{border-top:0}
+.gloss .zh{font-family:var(--f-zh);font-size:1.05rem;white-space:nowrap}
+.gloss .en{font-family:var(--f-display);font-size:1.05rem}
+.gloss .ar{color:var(--muted);font-family:var(--f-mono);width:2rem}
+.gloss .ctx{font:400 .78rem var(--f-mono);color:var(--muted);text-align:right;white-space:nowrap;padding-right:0}
+
+/* sections */
+section.block{display:grid;grid-template-columns:12rem minmax(0,1fr);gap:1rem 3rem;padding-block:clamp(2.5rem,6vw,4.5rem);border-bottom:1px solid var(--line)}
+.label{font:500 .75rem/1.5 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:.45rem}
+.block h2{font-size:clamp(1.6rem,3vw,2.1rem);line-height:1.2;max-width:28ch}
+.body{min-width:0;display:grid;gap:1.75rem}
+.body > p{max-width:62ch}
+@media (max-width:760px){section.block{grid-template-columns:minmax(0,1fr)}}
+
+/* services */
+.svc{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1.75rem 2.5rem}
+.svc h3{font-size:1.15rem;margin-bottom:.35rem}
+.svc p{color:var(--muted);font-size:.95rem}
+.not{font-size:.9rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:1rem}
+.not strong{color:var(--ink);font-weight:600}
+
+/* specialisms */
+.spec{display:grid;gap:0}
+.spec li{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1rem;padding:.9rem 0;border-top:1px solid var(--line);align-items:baseline}
+.spec li:last-child{border-bottom:1px solid var(--line)}
+.spec ul{margin:0;padding:0}
+.spec .name{font-family:var(--f-display);font-size:1.2rem}
+.spec .zh{font-family:var(--f-zh);color:var(--muted);font-size:.95rem}
+.minor{font-size:.9rem;color:var(--muted)}
+
+/* cases */
+.cases{display:grid;gap:1.25rem}
+.case{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:clamp(1.25rem,3vw,1.75rem);display:grid;grid-template-columns:minmax(0,1fr) 13rem;gap:1.5rem 2.5rem}
+.case h3{font-size:1.3rem;margin-bottom:.25rem}
+.case .meta{font:400 .78rem var(--f-mono);color:var(--muted);letter-spacing:.03em}
+.case ul{margin:.9rem 0 0;padding-left:1.1rem;display:grid;gap:.4rem;font-size:.95rem}
+.case ul li::marker{color:var(--accent)}
+.figs{display:grid;gap:.9rem;align-content:start;border-left:1px solid var(--line);padding-left:1.5rem}
+.fig .n{font:500 1.6rem/1.1 var(--f-mono);font-variant-numeric:tabular-nums;color:var(--accent)}
+.fig .u{font-size:.8rem;color:var(--muted)}
+@media (max-width:640px){.case{grid-template-columns:minmax(0,1fr)}.figs{border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:1rem;grid-template-columns:repeat(auto-fit,minmax(8rem,1fr))}}
+.note{font-size:.85rem;color:var(--muted);max-width:62ch}
+
+/* process */
+.steps{margin:0;padding:0;list-style:none;counter-reset:s;display:grid;gap:1.1rem}
+.steps li{counter-increment:s;display:grid;grid-template-columns:2.5rem minmax(0,1fr);gap:.75rem}
+.steps li::before{content:counter(s,decimal-leading-zero);font:500 .85rem/1.9 var(--f-mono);color:var(--accent)}
+.steps strong{font-weight:600}
+.steps span{color:var(--muted)}
+
+/* creds */
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:2rem 3rem}
+.two h3{font:500 .75rem var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem}
+.dl{margin:0;display:grid;gap:.75rem}
+.dl div{display:grid;gap:.1rem}
+.dl dt{font-weight:600}
+.dl dd{margin:0;color:var(--muted);font-size:.92rem}
+
+/* inquiry */
+.checklist{margin:0;padding:0;list-style:none;display:grid;gap:.5rem;max-width:40rem}
+.checklist li{display:flex;gap:.75rem;padding:.6rem .9rem;background:var(--accent-soft);border-radius:3px}
+.checklist li::before{content:"□";color:var(--accent);font-family:var(--f-mono)}
+
+/* contact */
+.contact{display:grid;gap:1rem;max-width:40rem}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1rem;padding:1rem 0;border-top:1px solid var(--line)}
+.row:last-child{border-bottom:1px solid var(--line)}
+.row .k{font:500 .75rem var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);width:6rem}
+.row .v{font-family:var(--f-display);font-size:1.2rem;flex:1 1 14rem;min-width:0;overflow-wrap:anywhere;user-select:all}
+.copy{font:500 .8rem var(--f-body);background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:3px;padding:.35rem .7rem;cursor:pointer}
+.copy:hover{border-color:var(--accent);color:var(--accent)}
+
+/* zh */
+.zh-block{font-family:var(--f-zh);line-height:1.9}
+.zh-block p{max-width:36em;font-family:var(--f-body)}
+
+footer{padding-block:2rem 3rem;font-size:.82rem;color:var(--muted);display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem}
+@media (prefers-reduced-motion:no-preference){.btn,.copy{transition:background-color .15s,color .15s,border-color .15s}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="mark" href="#top" id="top">Alvin Dai</a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#services">Services</a>
+      <a href="#work">Selected work</a>
+      <a href="#process">Process</a>
+      <a href="#inquiries">Inquiries</a>
+      <a href="#zh">中文</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <p class="eyebrow">Chinese → English translator · Taiwan · Remote</p>
+    <h1>Financial reports, ESG and corporate disclosure, in <em>publication-ready</em> English.</h1>
+    <p class="lede">I translate the documents listed companies publish: sustainability reports, annual reports to shareholders and governance disclosures. The work is mostly tables, figures and defined terms, so I check all three against the source before anything leaves my desk.</p>
+    <div class="cta">
+      <a class="btn primary" href="#inquiries">Request a quote</a>
+      <a class="btn ghost" href="https://www.linkedin.com/in/liangweidai/" target="_blank" rel="noopener">LinkedIn profile</a>
+    </div>
+  </section>
+</div>
+
+<div class="gloss">
+  <div class="wrap">
+    <table>
+      <caption>Terms I work with every week</caption>
+      <tbody>
+        <tr><td class="zh" lang="zh-Hant">永續報告書</td><td class="ar">→</td><td class="en">Sustainability Report</td><td class="ctx">ESG</td></tr>
+        <tr><td class="zh" lang="zh-Hant">氣候相關財務揭露</td><td class="ar">→</td><td class="en">Climate-related Financial Disclosures</td><td class="ctx">TCFD · IFRS S2</td></tr>
+        <tr><td class="zh" lang="zh-Hant">溫室氣體盤查</td><td class="ar">→</td><td class="en">Greenhouse Gas Inventory</td><td class="ctx">ESG</td></tr>
+        <tr><td class="zh" lang="zh-Hant">股東會年報</td><td class="ar">→</td><td class="en">Annual Report to Shareholders</td><td class="ctx">AGM</td></tr>
+        <tr><td class="zh" lang="zh-Hant">合併財務報告</td><td class="ar">→</td><td class="en">Consolidated Financial Statements</td><td class="ctx">Financial reporting</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="block" id="services">
+    <p class="label">Services</p>
+    <div class="body">
+      <h2>Written translation from Chinese into English, plus the checks that make it printable.</h2>
+      <div class="svc">
+        <div><h3>Translation</h3><p>Traditional Chinese source into English for corporate and official documents, delivered in the client's Word or CAT format.</p></div>
+        <div><h3>Revision and proofreading</h3><p>Bilingual review of an existing English draft against the Chinese source, with tracked changes.</p></div>
+        <div><h3>Linguistic QA</h3><p>Checks for omissions, numbers, units, terminology and consistency across sections and with earlier editions.</p></div>
+        <div><h3>Glossaries and translation memory</h3><p>Client-specific term lists and TMs, built during the project and handed over for the next report cycle.</p></div>
+        <div><h3>Layout and pagination check</h3><p>Final-file check of the table of contents, headers, page numbers and tables after English text expansion.</p></div>
+      </div>
+      <p class="not"><strong>Not offered:</strong> interpreting, on-site work, and English-to-Chinese translation.</p>
+    </div>
+  </section>
+
+  <section class="block" id="fields">
+    <p class="label">Fields</p>
+    <div class="body">
+      <h2>Where most of my work comes from</h2>
+      <div class="spec">
+        <ul>
+          <li><span class="name">ESG and sustainability reports</span><span class="zh" lang="zh-Hant">永續報告書</span></li>
+          <li><span class="name">Annual reports and financial reporting</span><span class="zh" lang="zh-Hant">年報・財務報告</span></li>
+          <li><span class="name">Corporate governance and compliance</span><span class="zh" lang="zh-Hant">公司治理・法遵</span></li>
+        </ul>
+      </div>
+      <p class="minor">I also translate contracts, corporate policies, immigration and notarial certificates, and tax and property documents.</p>
+    </div>
+  </section>
+
+  <section class="block" id="work">
+    <p class="label">Selected work</p>
+    <div class="body">
+      <h2>Three recent projects</h2>
+      <div class="cases">
+        <article class="case">
+          <div>
+            <h3>Sustainability report, listed company</h3>
+            <p class="meta">ESG · Governance · TCFD / IFRS S2 chapters · Print-ready Word</p>
+            <ul>
+              <li>More than half of the source text sat inside 80 tables, so figures were checked cell by cell.</li>
+              <li>Built a 44-entry glossary aligned with the company's existing English annual report.</li>
+              <li>Compared every segment with the Chinese source before delivery and restored 27 passages missing after review rounds.</li>
+              <li>Rebuilt the table of contents, headers and page numbers after English text expansion.</li>
+            </ul>
+          </div>
+          <div class="figs">
+            <div class="fig"><div class="n">37,300</div><div class="u">Chinese characters</div></div>
+            <div class="fig"><div class="n">80</div><div class="u">tables</div></div>
+            <div class="fig"><div class="n">44</div><div class="u">glossary entries</div></div>
+          </div>
+        </article>
+
+        <article class="case">
+          <div>
+            <h3>ESG report, construction company</h3>
+            <p class="meta">ESG · Construction · Bilingual glossary delivered</p>
+            <ul>
+              <li>Project and development names are proper nouns, so I kept a separate bilingual name list for the client's sign-off.</li>
+              <li>Delivered as a controlled revision, with the English text marked in blue for client review.</li>
+            </ul>
+          </div>
+          <div class="figs">
+            <div class="fig"><div class="n">19,900</div><div class="u">Chinese characters</div></div>
+          </div>
+        </article>
+
+        <article class="case">
+          <div>
+            <h3>Annual report to shareholders, listed company</h3>
+            <p class="meta">AGM · Financial and governance disclosure</p>
+            <ul>
+              <li>Complete annual report translated from the Chinese edition, delivered in Word.</li>
+            </ul>
+          </div>
+          <div class="figs">
+            <div class="fig"><div class="n">59,100</div><div class="u">Chinese characters</div></div>
+            <div class="fig"><div class="n">43,200</div><div class="u">English words delivered</div></div>
+          </div>
+        </article>
+      </div>
+      <p class="note">Clients are not named and no source or target text is shown. These documents belong to my clients, and I keep them confidential.</p>
+    </div>
+  </section>
+
+  <section class="block" id="process">
+    <p class="label">Process</p>
+    <div class="body">
+      <h2>How a report moves through my desk</h2>
+      <ol class="steps">
+        <li><div><strong>Read the references first.</strong> <span>Last year's English report, the client's style guide and any approved term list.</span></div></li>
+        <li><div><strong>Fix the terms before translating.</strong> <span>A project glossary goes into Trados with the translation memory, so the same term reads the same in chapter 1 and chapter 9.</span></div></li>
+        <li><div><strong>Translate in the CAT tool.</strong> <span>Segment by segment, tables included.</span></div></li>
+        <li><div><strong>Check numbers, units and completeness.</strong> <span>Every figure against the source, every segment accounted for.</span></div></li>
+        <li><div><strong>Check the final file.</strong> <span>Contents page, headers, page numbers and table layout in the delivered format.</span></div></li>
+      </ol>
+      <p class="note">Confidentiality: client files stay on my own machine and are never uploaded to public AI tools.</p>
+    </div>
+  </section>
+
+  <section class="block" id="background">
+    <p class="label">Background</p>
+    <div class="body">
+      <h2>Translating for Taiwanese agencies since 2022</h2>
+      <div class="two">
+        <div>
+          <h3>Education and credentials</h3>
+          <dl class="dl">
+            <div><dt>B.A., Chinese Literature</dt><dd>Fu Jen Catholic University, Taiwan</dd></div>
+            <div><dt>TOEIC 925 / 990</dt><dd>ETS, tested June 2024 (Listening 475, Reading 450)</dd></div>
+          </dl>
+        </div>
+        <div>
+          <h3>Tools</h3>
+          <dl class="dl">
+            <div><dt>Trados Studio 2022 / 2017</dt><dd>CAT tool for all projects</dd></div>
+            <div><dt>TermSoup</dt><dd>Terminology research</dd></div>
+            <div><dt>Translation memory and glossaries</dt><dd>TMX and bilingual term lists, handed over with the project</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="inquiries">
+    <p class="label">Inquiries</p>
+    <div class="body">
+      <h2>To get a quote, send me</h2>
+      <ul class="checklist">
+        <li>Document type</li>
+        <li>Approximate source length (Chinese characters)</li>
+        <li>Deadline</li>
+        <li>A representative sample</li>
+        <li>Reference materials or a style guide, if you have them</li>
+      </ul>
+      <p>Quotes are based on Chinese source character count, scope (for example glossary work or a final layout check) and deadline. I reply with a fixed price and delivery date.</p>
+      <div class="contact" id="contact">
+        <div class="row">
+          <span class="k">Email</span>
+          <span class="v" id="email">alvinthisis@gmail.com</span>
+          <button class="copy" type="button" id="copy-email" data-target="email">Copy</button>
+        </div>
+        <div class="row">
+          <span class="k">LinkedIn</span>
+          <span class="v"><a href="https://www.linkedin.com/in/liangweidai/" target="_blank" rel="noopener">linkedin.com/in/liangweidai</a></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="zh" lang="zh-Hant">
+    <p class="label">中文說明</p>
+    <div class="body zh-block">
+      <h2>給翻譯社 PM 與企業窗口</h2>
+      <p>我是戴良維（Alvin Dai），專做中翻英筆譯，以上市櫃公司的永續報告書、股東會年報與公司治理文件為主，遠距合作。可承接翻譯、英文譯稿校潤、語言品質檢核（LQA）、術語表建置，以及交付前的目錄、頁碼與表格驗收。不接口譯、駐點與英翻中。</p>
+      <p>詢價請提供文件類型、約略中文字數、交期與樣稿，我會回覆固定報價與交付日期。聯絡信箱：alvinthisis@gmail.com</p>
+    </div>
+  </section>
+</main>
+
+<div class="wrap">
+  <footer>
+    <span>© 2026 Liang-Wei (Alvin) Dai</span>
+    <span>Chinese-to-English translation · Taiwan</span>
+  </footer>
+</div>
+
+<script>
+document.querySelectorAll('.copy').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var el = document.getElementById(btn.dataset.target);
+    var text = el.textContent.trim();
+    var done = function(){ btn.textContent = 'Copied'; setTimeout(function(){ btn.textContent = 'Copy'; }, 1600); };
+    var fallback = function(){ var r = document.createRange(); r.selectNodeContents(el); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = 'Selected'; };
+    try { navigator.clipboard.writeText(text).then(done, fallback); } catch(e){ fallback(); }
+  });
+});
+</script>
+</body>
+</html>
